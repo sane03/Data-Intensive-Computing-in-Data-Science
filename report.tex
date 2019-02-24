@@ -1,0 +1,121 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{times}
+\usepackage[normalem]{ulem}
+\usepackage{fancyhdr,graphicx,amsmath,amssymb, mathtools, scrextend, titlesec, enumitem}
+\usepackage[ruled,linesnumbered]{algorithm2e} 
+\include{pythonlisting}
+
+\title{Lab 1: 3-D by 3-D Array Multiplication}
+\author{Knowledge Dzumba (813137), Sanele Ndlovu (716411)}
+\begin{document}
+\maketitle
+
+\pagebreak
+
+\noindent
+\textbf{Algorithm 1} computes the addition of two matrices \emph{A} and \emph{B}. This is done by adding corresponding elements in both these matrices. The result is returned in matrix \emph{C}
+
+\begin{algorithm}
+\caption{rank2TensorAdd}
+\KwIn{\emph{n} x \emph{n} matrices \emph{A} and \emph{B}}
+\KwOut{\emph{n} x \emph{n} matrix \emph{C}}
+\hrulefill\\
+
+\emph{n = A.rows} \\
+\emph{Let C be a newly created} \emph{n} x \emph{n} \emph{matrix} \\
+
+\nl \For{i = 0 to n - 1} {
+	\nl \For{j = 0 to n - 1}{
+    	\nl \emph{C[i][j] = A[i][j] $+$ B[i][j]}
+    	}
+        }
+\nl \Return{$C$}
+\end{algorithm}
+
+\noindent
+\textbf{Algorithm 2} computes the multiplication of two matrices \emph{A} and \emph{B}. The algorithm uses rank 2 tensor contraction method to compute this multiplication and the result is returned in \emph{C}
+
+\begin{algorithm}
+\caption{rank2TensorMult}
+\KwIn{\emph{n} x \emph{n} matrices \emph{A} and \emph{B}}
+\KwOut{\emph{n} x \emph{n} matrix \emph{C}}
+\hrulefill\\
+
+\emph{n = A.rows} \\
+\emph{Let C be a newly created} \emph{n} x \emph{n} \emph{matrix} \\
+\nl \For{i = 0 to n - 1} {
+	\nl \For{j = 0 to n - 1}{
+	    \nl \emph{C[i][j] = 0}
+	    
+	    \For{k = 0 to n - 1}
+	    {
+	        \emph{C[i][j] = C[i][j] $+$ A[i][k]$*$B[k][j]}
+	    }
+    	}
+    }
+\nl \Return{$C$}
+\end{algorithm}
+
+\noindent
+\textbf{Algorithm 3} performs 3D matrix addition of two 3D matrices \emph{A} and \emph{B}. This operation is an element wise addition, so corresponding elements in matrix \emph{A} and matrix \emph{B} are simply added together and the result of the addition is returned in matrix \emph{C}
+
+\pagebreak
+
+
+\begin{algorithm}
+\caption{rank3TensorAdd}
+\KwIn{\emph{n} x \emph{n} x \emph{n} matrices \emph{A} and \emph{B}}
+\KwOut{\emph{n} x \emph{n} x \emph{n} matrix \emph{C}}
+\hrulefill \\
+
+\emph{n = A.rows} \\
+\emph{Let C be a newly created} \emph{n} x \emph{n} x \emph{n} \emph{matrix} \\
+\nl \For{i = 0 to n - 1} {
+    \nl \For{j = 0 to n - 1}{
+        \nl \For{k = 0 to n - 1}
+        {
+            \emph{C[i][j][k] = A[i][j][k] $+$ B[i][j][k]}
+        }
+    }
+}
+\nl \Return{$C$}
+\end{algorithm}
+
+\noindent
+\textbf{Algorithm 4} performs 3D matrix multiplication of two 3D matrices \emph{A} and \emph{B}. This is done using a similar strategy as that used for 2D matrix multiplication, modified to fit the case of a 3D matrix. In this algorithm, a row is considered to be a 2D horizontal matrix that is part of the 3D matrix (cube) \emph{A}, and a column is considered to be a left-facing 2D vertical matrix that is also part of a 3D matrix \emph{B}. In the case of 2D matrix multiplication, a row of some matrix \emph{D} is multiplied by a column of some second matrix \emph{D} to produce a single element(scalar) of the resulting matrix \emph{F}, while in the case of 3D matrix multiplication, a row of matrix \emph{A} is multiplied by a column of matrix \emph{B} to produce a vector whose elements form part of the resulting \emph{C} matrix. An element at index \emph{i,j,k} of the resulting \emph{C} matrix is found using the formula:
+
+\begin{align*}
+  C_{ijk} &= \sum_{l} A_{ilk}\times B_{ljk} \\
+\end{align*}\begin{align*}
+
+\noindent It is assumed in this algorithm that the dimensions of both \emph{A} and \emph{B} matrices are the same, that is they are both \emph{n} \times \emph{n} \times \emph{n}.
+
+\pagebreak
+
+\begin{algorithm}
+\caption{rank3TensorMult}
+\KwIn{\emph{n} x \emph{n} \emph{n} matrices \emph{A} and \emph{B}}
+\KwOut{\emph{n} x \emph{n} x \emph{n} matrix \emph{C}}
+\hrulefill \\
+
+\emph{n = A.rows} \\
+\emph{Let C be a newly created} \emph{n} x \emph{n} x \emph{n} \emph{matrix} \\
+
+\nl \For{i = 0 to n - 1}{
+    \nl \For{j = 0 to n - 1}{
+        \nl \For{k = 0 to n - 1}
+        {
+            \emph{C[i][j][k] = 0}
+            
+            \nl \For{l = 0 to n - 1}
+            {
+                \emph{C[i][j][k] = C[i][j][k] $+$ A[i][l][k]*B[l][k][k]}
+            }
+        }
+    }
+}
+\nl \Return{$C$}
+
+\end{algorithm}
+\end{document}
