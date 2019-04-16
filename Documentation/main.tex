@@ -1,0 +1,127 @@
+\documentclass[11pt]{IEEEtran}
+\onecolumn
+\renewcommand\thesection{\arabic{section}}
+\renewcommand\thesubsection{\thesection.\arabic{subsection}}
+\renewcommand\thesubsubsection{\thesubsection.\arabic{subsubsection}}
+\renewcommand\figurename{Figure.}
+\renewcommand{\thetable}{\arabic{table}}
+
+\renewcommand\thesectiondis{\arabic{section}}
+\renewcommand\thesubsectiondis{\thesectiondis.\arabic{subsection}}
+\renewcommand\thesubsubsectiondis{\thesubsectiondis.\arabic{subsubsection}}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{textcomp}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usepackage{caption}
+\usepackage{subfigure}
+\usepackage{amsmath}
+\usepackage{ragged2e}
+%\usepackage[]{algorithm2e}
+%\usepackage{algpseudocode}
+\usepackage{fancyhdr,graphicx,amsmath,amssymb, mathtools, scrextend, titlesec, enumitem}
+\usepackage[ruled,linesnumbered]{algorithm2e} 
+
+
+\begin{document}
+
+	\title{MapReduce}
+	\author{\IEEEauthorblockN{\textbf{Sanele Ndlovu-716411 \\ Knowledge Dzumba - 813137} \\
+			\IEEEauthorblockA{School of Electrical and Information Engineering, University of the Witwatersrand, Johannesburg \\
+				ELEN4020A:Data Intensive Computing in Data Science}}}
+	\maketitle
+	
+
+\section{Introduction}
+
+\noindent
+This report presents results of a programming laboratory work on MapReduce, using MRJob python framework. The purpose of the lab is to explore the use cases of MapReduce as applied to common problems on big data problems.
+
+
+\section{Counting Occurrences of Words}
+
+\noindent
+\textbf{Algorithm 1} computes the occurrences of words within a text file. This is done by mapping the single words individually and counting them, a combiner is used to optimize the algorithm and sum the the word frequencies that have been encountered already. The reducer sums up the total word frequencies after the mapper is done with the text file, because of the combiner the reducer's job steps are reduced. The time taken to execute the program using a mid size file is  \textbf{0.12503480911254883s}, and the time taken to execute the program using the File2ForLab3.txt is \textbf{2.828373432159424s}.
+
+
+\begin{algorithm}[H]
+ \KwIn{text file with words}
+ \KwOut{key = words, value = frequency}
+ 
+ \emph{open textfile and remove all punctuation} \\
+ {\For{word in textfile to end of file}
+   {
+    word to lowercase\\
+    \Return word,1
+   }
+ }
+ {\For{key,value in word}
+   {
+
+    \Return key,sum(value)
+   }
+ }
+ 
+ \Return{key,value}
+ \caption{Word Counting}
+\end{algorithm}
+
+
+\section{Top-K}
+
+\noindent
+\textbf{Algorithm 2} outputs the top-K words of a textfile. The top appearances of the words in a text file are stored in descending order the first being the most appearing word. 
+
+\begin{algorithm}[H]
+ \KwIn{text file with words}
+ \KwOut{key = words, value = frequency}
+ \For{ word in textfile to end of file}
+ {  
+    remove all punctuation\\
+    Counter[word.lower()] += 1\\
+    sort Counter\\
+    \Return{Counter}
+ }
+  \For{ key,value in  Counter.most\_common(k)}
+ {  
+    
+    \Return{key,value}
+ }
+   \Return{key,value}
+ \caption{Naive Top-K algorithm}
+ 
+\end{algorithm}
+
+Testing the algorithm using my\_File.txt for K$=$10 gives the time \textbf{0.13726162910461426s}
+and for K$=$20 \textbf{0.15708613395690918s} respectively.
+Testing the algorithm using File2ForLab3.txt for K=10 gives the time \textbf{8.13726162910461426s}
+and for K = 20 the program did no finish running. This is because of the inefficient algorithm used in the implementation. An alternative more efficient algorithm to be used is Fagin's Algorithm. This would be more efficient because not all the text would be searched and summed to give the Top-K.
+
+
+
+\section{Inverted Index Algorithm}
+\noindent
+\textbf{Algorithm 3} computes the inverted index of the texts, not implemented in code
+
+\begin{algorithm}[H]
+  \KwIn{(filename,texts)records}
+  \KwOut{words,filenames}
+  
+ \For{ words in text.split()}
+ {
+   \Return{word,filename}
+ }
+  \For{words,filenames in record }
+ {
+   \Return{word, sort(filenames)}
+ }
+ 
+ \caption{Inverted Index}
+\end{algorithm}
+
+
+
+
+\end{document}
